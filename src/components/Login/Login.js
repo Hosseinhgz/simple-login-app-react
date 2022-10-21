@@ -19,6 +19,7 @@ const Login = (props) => {
       );
     },500)
 
+    // This return is run before the above code runs (not for the first time)
     return () => {
       console.log('Reset timeout')
       clearTimeout(identifier)

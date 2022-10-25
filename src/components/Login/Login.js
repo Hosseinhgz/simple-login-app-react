@@ -1,4 +1,4 @@
-import React, {useState, useReducer} from 'react';
+import React, {useState, useReducer, useEffect} from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -30,6 +30,20 @@ const Login = (props) => {
 
   const [emailState , dispatchEmail] = useReducer(emailReducer, {value:'', isValid: null} )
   const [passwordState , dispatchPassword] = useReducer(passwordReducer, {pass:'', isValid: null} )
+
+  const {isvalid : emailIsValid} = emailState // destructuring and give Alias to isValid => emailIsValid
+  const {isvalid : passwordIsValid} = passwordState // destructuring and give Alias to isValid => passwordIsValid
+
+  useEffect(()=>{
+    const identifier = setTimeout(()=>{
+      console.log('Checking form validity!')
+      setFormIsValid(emailIsValid && passwordIsValid)
+    },500)
+    return () => {
+      console.log('Clean up and reset timeout')
+      clearTimeout(identifier)
+    }
+  }, [emailIsValid,passwordIsValid])
 
   const emailChangeHandler = (event) => {
     dispatchEmail({type:'USER_INPUT', val: event.target.value})

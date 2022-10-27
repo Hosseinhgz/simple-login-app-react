@@ -1,8 +1,9 @@
-import React, {useState, useReducer, useEffect} from 'react';
+import React, {useState, useReducer, useEffect, useContext} from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from "../../store/auth-context";
 
 const emailReducer = (state , action) => {
   if (action.type === 'USER_INPUT'){
@@ -30,9 +31,10 @@ const Login = (props) => {
 
   const [emailState , dispatchEmail] = useReducer(emailReducer, {value:'', isValid: null} )
   const [passwordState , dispatchPassword] = useReducer(passwordReducer, {pass:'', isValid: null} )
+  const ctx = useContext(AuthContext)
 
-  const {isvalid : emailIsValid} = emailState // destructuring and give Alias to isValid => emailIsValid
-  const {isvalid : passwordIsValid} = passwordState // destructuring and give Alias to isValid => passwordIsValid
+  const {isValid : emailIsValid} = emailState // destructuring and give Alias to isValid => emailIsValid
+  const {isValid : passwordIsValid} = passwordState // destructuring and give Alias to isValid => passwordIsValid
 
   useEffect(()=>{
     const identifier = setTimeout(()=>{
@@ -69,7 +71,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.pass);
+    ctx.onLogin(emailState.value, passwordState.pass);
   };
 
   return (
@@ -77,7 +79,7 @@ const Login = (props) => {
       <form onSubmit={submitHandler}>
         <div
           className={`${classes.control} ${
-            emailState.isValid === false ? classes.invalid : ''
+              emailIsValid === false ? classes.invalid : ''
           }`}
         >
           <label htmlFor="email">E-Mail</label>
@@ -91,7 +93,7 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordState.isValid === false ? classes.invalid : ''
+            passwordIsValid === false ? classes.invalid : ''
           }`}
         >
           <label htmlFor="password">Password</label>

@@ -1,7 +1,17 @@
-import React from 'react';
+import React, {useRef , useImperativeHandle} from 'react';
 import classes from "../../UI/Input/InputField.module.css";
 
-function InputField(props) {
+const  InputField= React.forwardRef((props,ref) =>{
+    const inputRef = useRef();
+    const activate = ()=>{
+        inputRef.current.focus();
+    }
+
+    useImperativeHandle(ref, ()=>{
+        return{
+            focus:activate, // after : is a function that we want to expose from outside (like parent component
+        }
+    })
     return (
         <div
             className={`${classes.control} ${
@@ -18,6 +28,6 @@ function InputField(props) {
             />
         </div>
     );
-}
+});
 
 export default InputField;
